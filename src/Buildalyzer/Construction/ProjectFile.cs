@@ -18,7 +18,8 @@ namespace Buildalyzer.Construction
         public static readonly string[] ImportsThatRequireNetFramework = new string[]
         {
             "Microsoft.Portable.CSharp.targets",
-            "Microsoft.Windows.UI.Xaml.CSharp.targets"
+            "Microsoft.Windows.UI.Xaml.CSharp.targets",
+            "Microsoft.Windows.UI.Xaml.VisualBasic.targets"
         };
 
         private readonly XDocument _document;
@@ -89,7 +90,7 @@ namespace Buildalyzer.Construction
         /// Also checks for a <c>ToolsVersion</c> attribute and uses the .NET Framework if one is found.
         /// </remarks>
         public bool RequiresNetFramework =>
-            _projectElement.GetDescendants(ProjectFileNames.Import).Any(x => ImportsThatRequireNetFramework.Any(i => x.GetAttributeValue(ProjectFileNames.Project).EndsWith(i, StringComparison.OrdinalIgnoreCase)))
+            _projectElement.GetDescendants(ProjectFileNames.Import).Any(x => ImportsThatRequireNetFramework.Any(i => x.GetAttributeValue(ProjectFileNames.Project)?.EndsWith(i, StringComparison.OrdinalIgnoreCase) == true))
             || _projectElement.GetDescendants(ProjectFileNames.LanguageTargets).Any(x => ImportsThatRequireNetFramework.Any(i => x.Value.EndsWith(i, StringComparison.OrdinalIgnoreCase)))
             || ToolsVersion != null;
 
